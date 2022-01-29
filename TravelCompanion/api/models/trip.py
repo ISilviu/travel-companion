@@ -8,7 +8,7 @@ class Trip(models.Model):
         User, null=True, on_delete=models.CASCADE, related_name='initiated_trips')
     participants = models.ManyToManyField(
         User, related_name='participating_trips')
-    cities = models.ManyToManyField(City, through='TripCity')
+    cities = models.ManyToManyField(City)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
     price = models.PositiveBigIntegerField(null=True)
