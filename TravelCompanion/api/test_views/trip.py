@@ -28,17 +28,28 @@ class TripApiTests(CommonOperationsMixin, APITestCase):
 
         data = {
             'initiator': user.pk,
-            'participants': [
-                user2.pk,
-                user3.pk,
-            ],
-            'cities': [{'city': city.id, 'flight_number': city.id + 1} for city in cities],
+            'participants': [],
+            'cities': [],
             'start_date': '2022-01-19',
             'end_date': '2022-01-29',
             'price': 1000
         }
 
-        response = self.client.post(self.url_base, data=data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        data_with_participants = {
+            **data,
+            'participants': [user2.pk, user3.pk]
+        }
+        data_with_cities = {
+            **data,
+            'cities': [{'city': city.id, 'flight_number': city.id + 1} for city in cities]
+        }
+        data_with_both = {
+            **data,
+            'participants': [user2.pk, user3.pk],
+            'cities': [{'city': city.id, 'flight_number': city.id + 1} for city in cities]
+        }
 
-        
+        for data_set in [data, data_with_participants, data_with_cities, data_with_both]:
+            response = self.client.post(
+                self.url_base, data=data_set, format='json')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
