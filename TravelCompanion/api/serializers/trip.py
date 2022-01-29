@@ -6,7 +6,7 @@ from ..models.trip import Trip, TripCity
 from ..models.user import User
 
 
-class TripCitySerializer(serializers.ModelSerializer):
+class ReadonlyTripCitySerializer(serializers.ModelSerializer):
     class Meta:
         model = TripCity
         fields = ['trip', 'city', 'flight_number']
@@ -19,16 +19,19 @@ class UserTripSerializer(serializers.ModelSerializer):
 
 
 class TripCitySerializer(serializers.ModelSerializer):
-    city = CitySerializer()
     class Meta:
         model = TripCity
         fields = ['city', 'flight_number']
 
 
+class ReadonlyTripCitySerializer(TripCitySerializer):
+    city = CitySerializer()
+
+
 class ReadonlyTripSerializer(serializers.ModelSerializer):
     initiator = UserTripSerializer(read_only=True)
     participants = UserTripSerializer(many=True, read_only=True)
-    cities = TripCitySerializer(source='tripcity_set', many=True)
+    cities = ReadonlyTripCitySerializer(source='tripcity_set', many=True)
 
     class Meta:
         model = Trip
@@ -37,13 +40,26 @@ class ReadonlyTripSerializer(serializers.ModelSerializer):
 
 
 class TripSerializer(serializers.ModelSerializer):
+    cities = TripCitySerializer(source='tripcity_set', many=True)
+
     class Meta:
         model = Trip
         fields = ReadonlyTripSerializer.Meta.fields
 
+    def create(self, validated_data):
+        # Nested objects insertion doesn't come out of the box, we need to handle this separately.
+        cities = validated_data.pop('tripcity_set')
+        trip = super().create(validated_data)
+
+        for data in cities:
+            TripCity.objects.create(**{'trip': trip, **data})
+
+        return trip
+
 
 class TripCitiesSerializer(serializers.ModelSerializer):
-    cities = TripCitySerializer(source='tripcity_set', many=True)
+    cities = ReadonlyTripCitySerializer(source='tripcity_set', many=True)
+
     class Meta:
         model = Trip
         fields = ['cities']
