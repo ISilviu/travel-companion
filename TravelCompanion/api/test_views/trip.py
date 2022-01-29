@@ -53,3 +53,22 @@ class TripApiTests(CommonOperationsMixin, APITestCase):
             response = self.client.post(
                 self.url_base, data=data_set, format='json')
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_trip_missing_fields(self):
+        data = {
+            'participants': [],
+            'cities': [],
+            'start_date': '2022-01-19',
+            'end_date': '2022-01-29',
+            'price': 1000
+        }
+
+        data_no_participants = {**data, 'initiator': 1}
+        del data_no_participants['participants']
+
+        for data_set in [data, data_no_participants]:
+            response = self.client.post(
+                    self.url_base, data=data_set, format='json')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
