@@ -9,6 +9,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name', 'email',
                   'groups', 'participating_trips', 'initiated_trips']
 
+class InitiatedTripsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['initiated_trips']
 
 class UserTripSerializer(serializers.ModelSerializer):
     class Meta:
