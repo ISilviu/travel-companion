@@ -1,15 +1,21 @@
 from rest_framework import serializers
 
 from .city import CitySerializer
-from .user import UserTripSerializer
 
 from ..models.trip import Trip, TripCity
+from ..models.user import User
 
 
 class TripCitySerializer(serializers.ModelSerializer):
     class Meta:
         model = TripCity
         fields = ['trip', 'city', 'flight_number']
+
+
+class UserTripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
 
 class ReadonlyTripSerializer(serializers.ModelSerializer):
