@@ -2,7 +2,7 @@ from ddf import G
 from django.db import models
 from rest_framework import serializers, status
 
-class ReadonlyOperationsTestsMixin:
+class CommonOperationsMixin:
     test_model: models.Model = None
     serializer_class: serializers.Serializer = None
     url_base: str = None
@@ -34,4 +34,11 @@ class ReadonlyOperationsTestsMixin:
         result = self.client.get(f'{self.url_base}5/')
         self.assertEqual(result.status_code, status.HTTP_404_NOT_FOUND)
 
-    
+    def test_delete(self):
+        model = G(self.test_model)
+
+        response = self.client.delete(f'{self.url_base}{model.pk}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        response = self.client.delete(f'{self.url_base}{model.pk + 1}/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
