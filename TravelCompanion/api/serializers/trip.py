@@ -25,7 +25,7 @@ class ReadonlyTripSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trip
-        fields = ['initiator', 'participants',
+        fields = ['id', 'initiator', 'participants',
                   'cities', 'start_date', 'end_date', 'price']
 
 
