@@ -19,9 +19,10 @@ class UserTripSerializer(serializers.ModelSerializer):
 
 
 class TripCitySerializer(serializers.ModelSerializer):
+    city = CitySerializer()
     class Meta:
         model = TripCity
-        fields = ['trip', 'city', 'flight_number']
+        fields = ['city', 'flight_number']
 
 
 class ReadonlyTripSerializer(serializers.ModelSerializer):
