@@ -18,10 +18,16 @@ class UserTripSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
 
+class TripCitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TripCity
+        fields = ['trip', 'city', 'flight_number']
+
+
 class ReadonlyTripSerializer(serializers.ModelSerializer):
     initiator = UserTripSerializer(read_only=True)
     participants = UserTripSerializer(many=True, read_only=True)
-    cities = CitySerializer(many=True, read_only=True)
+    cities = TripCitySerializer(source='tripcity_set', many=True)
 
     class Meta:
         model = Trip
