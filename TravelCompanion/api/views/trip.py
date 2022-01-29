@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from ..models import Trip
+from ..models.trip import Trip
 from ..serializers.trip import TripSerializer
 
 
