@@ -5,9 +5,9 @@ from .city import City
 
 class Trip(models.Model):
     initiator = models.ForeignKey(
-        User, null=True, on_delete=models.CASCADE, related_name='initiated_trips')
+        User, on_delete=models.CASCADE, related_name='initiated_trips')
     participants = models.ManyToManyField(
-        User, related_name='participating_trips')
+        User, related_name='participating_trips', blank=True)
     cities = models.ManyToManyField(City, through='TripCity')
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
