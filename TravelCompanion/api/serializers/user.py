@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group
 from ..models.user import User
 from rest_framework import serializers
 
-from .trip import ReadonlyTripSerializer
+from .trip import ReadonlyTripSerializer, TripSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,14 +12,12 @@ class UserSerializer(serializers.ModelSerializer):
                   'groups', 'participating_trips', 'initiated_trips']
 
 
-class InitiatedTripsSerializer(serializers.ModelSerializer):
+class ReadonlyInitiatedTripsSerializer(serializers.ModelSerializer):
+    initiated_trips = ReadonlyTripSerializer(read_only=True, many=True)
+
     class Meta:
         model = User
         fields = ['initiated_trips']
-
-
-class ReadonlyInitiatedTripsSerializer(InitiatedTripsSerializer):
-    initiated_trips = ReadonlyTripSerializer(read_only=True, many=True)
 
 
 class GroupSerializer(serializers.ModelSerializer):
