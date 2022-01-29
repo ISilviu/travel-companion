@@ -18,7 +18,7 @@ class TripViewSet(viewsets.ModelViewSet):
     def cities(self, request, pk):
         trip = Trip.objects.filter(id=pk).first()
         if trip is None:
-            return Response('User not found.', status=status.HTTP_404_NOT_FOUND)
+            return Response('Trip not found.', status=status.HTTP_404_NOT_FOUND)
 
         trips = TripCitiesSerializer(trip).data
         return Response(trips, status=status.HTTP_200_OK)
