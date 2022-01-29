@@ -33,3 +33,11 @@ class TripSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = ReadonlyTripSerializer.Meta.fields
+
+
+class TripCitiesSerializer(serializers.ModelSerializer):
+    cities = CitySerializer(many=True)
+
+    class Meta:
+        model = Trip
+        fields = ['cities']
