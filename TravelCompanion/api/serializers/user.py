@@ -13,12 +13,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class InitiatedTripsSerializer(serializers.ModelSerializer):
-    trips = ReadonlyTripSerializer(
-        source='initiated_trips', read_only=True, many=True)
-
     class Meta:
         model = User
-        fields = ['trips']
+        fields = ['initiated_trips']
+
+
+class ReadonlyInitiatedTripsSerializer(InitiatedTripsSerializer):
+    initiated_trips = ReadonlyTripSerializer(read_only=True, many=True)
+
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
