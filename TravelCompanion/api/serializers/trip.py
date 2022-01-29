@@ -46,6 +46,16 @@ class TripSerializer(serializers.ModelSerializer):
         model = Trip
         fields = ReadonlyTripSerializer.Meta.fields
 
+    def update(self, instance, validated_data):
+        cities = validated_data.pop('tripcity_set')
+        instance = super().update(instance, validated_data)
+
+        for data in cities:
+            TripCity.objects.update_or_create(**{'trip': instance, **data})
+            
+        instance.save()
+        return instance
+
     def create(self, validated_data):
         # Nested objects insertion doesn't come out of the box, we need to handle this separately.
         cities = validated_data.pop('tripcity_set')
