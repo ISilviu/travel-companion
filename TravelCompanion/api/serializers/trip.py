@@ -43,8 +43,7 @@ class TripSerializer(serializers.ModelSerializer):
 
 
 class TripCitiesSerializer(serializers.ModelSerializer):
-    cities = CitySerializer(many=True)
-
+    cities = TripCitySerializer(source='tripcity_set', many=True)
     class Meta:
         model = Trip
         fields = ['cities']
