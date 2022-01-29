@@ -50,6 +50,7 @@ class TripSerializer(serializers.ModelSerializer):
         if attrs['start_date'] >= attrs['end_date']:
             raise serializers.ValidationError(
                 {'end_date': 'The end date must be after the start date.'})
+                
         return super().validate(attrs)
 
     def update(self, instance, validated_data):
