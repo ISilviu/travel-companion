@@ -1,4 +1,6 @@
 
+import datetime
+from django.utils import timezone
 from rest_framework.test import APITestCase
 from rest_framework import status
 
@@ -73,7 +75,7 @@ class TripApiTests(CommonOperationsMixin, APITestCase):
 
         for data_set in [data, data_no_participants, data_no_cities, data_price_string]:
             response = self.client.post(
-                    self.url_base, data=data_set, format='json')
+                self.url_base, data=data_set, format='json')
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_start_after_end(self):
@@ -87,5 +89,30 @@ class TripApiTests(CommonOperationsMixin, APITestCase):
         }
 
         response = self.client.post(
-                    self.url_base, data=data, format='json')
+            self.url_base, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_cities(self):
+        initiator = G(User)
+
+        today = timezone.now()
+        in_two_days = today + datetime.timedelta(days=2)
+
+        trip = G(Trip, initiator=initiator, start_date=today,
+                 end_date=in_two_days, price=100)
+        cities = G(City, n=3)
+
+        data = {
+            'cities': [{'city': city.pk, 'flight_number': city.pk + 1} for city in cities]
+        }
+
+        response = self.client.patch(
+            f'{self.url_base}{trip.pk}/', data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        trip = ReadonlyTripSerializer(
+            Trip.objects.prefetch_related('cities').filter(id=trip.pk), many=True).data
+
+        for index, city in enumerate(cities):
+            persisted_city = trip[0]['cities'][index]['city']
+            self.assertEqual(city.pk, persisted_city['id'])
