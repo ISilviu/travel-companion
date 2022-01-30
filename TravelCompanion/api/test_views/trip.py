@@ -66,9 +66,26 @@ class TripApiTests(CommonOperationsMixin, APITestCase):
         data_no_participants = {**data, 'initiator': 1}
         del data_no_participants['participants']
 
-        for data_set in [data, data_no_participants]:
+        data_no_cities = {**data, 'initiator': 1}
+        del data_no_cities['cities']
+
+        data_price_string = {**data, 'initiator': 1, 'price': '1000'}
+
+        for data_set in [data, data_no_participants, data_no_cities, data_price_string]:
             response = self.client.post(
                     self.url_base, data=data_set, format='json')
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_create_start_after_end(self):
+        data = {
+            'initiator': 1,
+            'participants': [],
+            'cities': [],
+            'start_date': '2022-01-30',
+            'end_date': '2022-01-29',
+            'price': 1000
+        }
 
+        response = self.client.post(
+                    self.url_base, data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
