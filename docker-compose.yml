@@ -1,0 +1,24 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      #DB_ENGINE: django.db.backends.postgresql_psycopg2
+      POSTGRES_USER: travel_user
+      POSTGRES_DB: travel
+      POSTGRES_PASSWORD: travel_123
+      #DB_HOST: localhost
+    volumes:
+      - pgdata:/var/lib/posgresql/data
+  travel:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./TravelCompanion:/code
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+volumes:
+  pgdata:
