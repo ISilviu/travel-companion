@@ -6,7 +6,7 @@ from rest_framework import status
 
 from .mixins import CommonOperationsMixin
 
-from ..models.trip import Trip
+from ..models.trip import Trip, TripCity
 from ..models.user import User
 from ..models.city import City
 from ..serializers.trip import ReadonlyTripSerializer
@@ -116,3 +116,22 @@ class TripApiTests(CommonOperationsMixin, APITestCase):
         for index, city in enumerate(cities):
             persisted_city = trip[0]['cities'][index]['city']
             self.assertEqual(city.pk, persisted_city['id'])
+
+    def test_get_trip_cities(self):
+        initiator = G(User)
+
+        today = timezone.now()
+        in_two_days = today + datetime.timedelta(days=2)
+
+        [city1, city2] = G(City, n=2)
+        trip = G(Trip, initiator=initiator, start_date=today,
+                 end_date=in_two_days, price=100)
+
+        response = self.client.get(f'{self.url_base}{trip.pk}/cities/')
+        self.assertEqual(len(response.data['cities']), 0)
+
+        G(TripCity, trip=trip, city=city1, flight_number=50)
+        G(TripCity, trip=trip, city=city2, flight_number=150)
+
+        response = self.client.get(f'{self.url_base}{trip.pk}/cities/')
+        self.assertEqual(len(response.data['cities']), 2)
