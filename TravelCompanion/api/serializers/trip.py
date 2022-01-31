@@ -47,14 +47,15 @@ class TripSerializer(serializers.ModelSerializer):
         fields = ReadonlyTripSerializer.Meta.fields
 
     def validate(self, attrs):
-        if attrs['start_date'] >= attrs['end_date']:
+        has_dates = 'start_date' in attrs and 'end_date' in attrs
+        if has_dates and attrs['start_date'] >= attrs['end_date']:
             raise serializers.ValidationError(
                 {'end_date': 'The end date must be after the start date.'})
-                
+
         return super().validate(attrs)
 
     def update(self, instance, validated_data):
-        cities = validated_data.pop('tripcity_set')
+        cities = validated_data.pop('tripcity_set', [])
         instance = super().update(instance, validated_data)
 
         for data in cities:
@@ -65,7 +66,7 @@ class TripSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Nested objects insertion doesn't come out of the box, we need to handle this separately.
-        cities = validated_data.pop('tripcity_set')
+        cities = validated_data.pop('tripcity_set', [])
         trip = super().create(validated_data)
 
         for data in cities:
