@@ -55,7 +55,7 @@ class TripSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def update(self, instance, validated_data):
-        cities = validated_data.pop('tripcity_set')
+        cities = validated_data.pop('tripcity_set', [])
         instance = super().update(instance, validated_data)
 
         for data in cities:
@@ -66,7 +66,7 @@ class TripSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Nested objects insertion doesn't come out of the box, we need to handle this separately.
-        cities = validated_data.pop('tripcity_set')
+        cities = validated_data.pop('tripcity_set', [])
         trip = super().create(validated_data)
 
         for data in cities:
