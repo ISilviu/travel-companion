@@ -135,3 +135,27 @@ class TripApiTests(CommonOperationsMixin, APITestCase):
 
         response = self.client.get(f'{self.url_base}{trip.pk}/cities/')
         self.assertEqual(len(response.data['cities']), 2)
+
+    def test_update_trip_details(self):
+        initiator = G(User)
+
+        today = timezone.now()
+        in_two_days = today + datetime.timedelta(days=2)
+
+        [city1, city2] = G(City, n=2)
+        trip = G(Trip, initiator=initiator, start_date=today,
+                 end_date=in_two_days, price=100)
+        G(TripCity, trip=trip, city=city1, flight_number=50)
+        G(TripCity, trip=trip, city=city2, flight_number=150)
+
+        expected_date = datetime.datetime(2025, 1, 29).date()
+        end_date_data = {'end_date': expected_date.strftime("%Y-%m-%d")}
+
+        self.client.patch(
+            f'{self.url_base}{trip.pk}/', data=end_date_data, format='json')
+        self.assertTrue(Trip.objects.get(pk=trip.pk).end_date == expected_date)
+
+        initiator = G(User, username='tc')
+        self.client.patch(
+            f'{self.url_base}{trip.pk}/', data={'initiator': initiator.pk}, format='json')
+        self.assertEqual(Trip.objects.get(pk=trip.pk).initiator.username, 'tc')
