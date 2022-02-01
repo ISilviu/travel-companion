@@ -22,6 +22,10 @@ class TripApiTests(CommonOperationsMixin, APITestCase):
     serializer_class = ReadonlyTripSerializer
     url_base = '/api/trips/'
 
+    def setUp(self):
+        user = User.objects.create_user('user', 'pass')
+        self.client.force_authenticate(user)
+
     def test_create_trip_successful(self):
         user = G(User, username='the_bat',
                  first_name='Christian', last_name='Bale')
