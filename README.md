@@ -2,7 +2,8 @@
 
 ## Running the application
 
-The application can be run using the following command: `docker-compose up`.
+The application can be run using the following command: `docker-compose up`. 
+It will run the tests, migrations and start the development server.
 ## Endpoints
 
 The application has 3 main REST endpoints:
