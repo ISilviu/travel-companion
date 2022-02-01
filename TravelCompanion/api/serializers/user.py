@@ -1,8 +1,7 @@
-from django.contrib.auth.models import Group
 from ..models.user import User
 from rest_framework import serializers
 
-from .trip import ReadonlyTripSerializer, TripSerializer
+from .trip import ReadonlyTripSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
