@@ -6,12 +6,6 @@ from ..models.trip import Trip, TripCity
 from ..models.user import User
 
 
-class ReadonlyTripCitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TripCity
-        fields = ['trip', 'city', 'flight_number']
-
-
 class UserTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
