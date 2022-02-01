@@ -3,6 +3,9 @@ from django.db import models
 from rest_framework import serializers, status
 
 class CommonOperationsMixin:
+    """
+    Mixin containing tests for operations that don't require custom fields or request bodies.
+    """
     test_model: models.Model = None
     serializer_class: serializers.Serializer = None
     url_base: str = None

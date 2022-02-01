@@ -1,9 +1,8 @@
-from django.contrib.auth.models import Group
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from ..serializers.user import ReadonlyInitiatedTripsSerializer, UserSerializer, GroupSerializer
+from ..serializers.user import ReadonlyInitiatedTripsSerializer, UserSerializer
 from ..models.user import User
 
 
@@ -20,8 +19,3 @@ class UserViewSet(viewsets.ModelViewSet):
 
         trips = ReadonlyInitiatedTripsSerializer(user).data
         return Response(trips, status=status.HTTP_200_OK)
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer

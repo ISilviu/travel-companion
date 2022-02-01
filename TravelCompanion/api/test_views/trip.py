@@ -15,6 +15,9 @@ from ddf import G
 
 
 class TripApiTests(CommonOperationsMixin, APITestCase):
+    """
+    Tests for the /trips endpoint.
+    """
     test_model = Trip
     serializer_class = ReadonlyTripSerializer
     url_base = '/api/trips/'

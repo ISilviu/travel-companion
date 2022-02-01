@@ -9,7 +9,7 @@ app_name = 'api'
 
 router = routers.DefaultRouter()
 
-# routes will go here
+# The application routes
 router.register('trips', TripViewSet)
 router.register('users', UserViewSet)
 router.register('cities', CityViewSet)
