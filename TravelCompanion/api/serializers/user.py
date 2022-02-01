@@ -8,10 +8,19 @@ class UserSerializer(serializers.ModelSerializer):
     """
     The serializer used for all the available operations at the /users endpoint.
     """
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email',
-                  'groups', 'participating_trips', 'initiated_trips']
+        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email',
+                  'groups', 'participating_trips', 'initiated_trips', 'is_superuser']
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = super().create(validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class ReadonlyInitiatedTripsSerializer(serializers.ModelSerializer):
