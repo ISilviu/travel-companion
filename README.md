@@ -1,5 +1,10 @@
 # Travel companion
 
+## Running the application
+
+The application can be run using the following command: `docker-compose up`.
+## Endpoints
+
 The application has 3 main REST endpoints:
 
 1. `/api/trips/`
@@ -18,3 +23,4 @@ The application has 3 main REST endpoints:
     - `{id}/trips/` -> GET - retrieves the trips of a user
 
 For request body examples, please check the viewset tests.
+
