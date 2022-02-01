@@ -6,6 +6,9 @@ from .trip import ReadonlyTripSerializer, TripSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    The serializer used for all the available operations at the /users endpoint.
+    """
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email',
@@ -13,6 +16,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ReadonlyInitiatedTripsSerializer(serializers.ModelSerializer):
+    """
+    Used to serialize a certain user's trips.
+    """
     initiated_trips = ReadonlyTripSerializer(read_only=True, many=True)
 
     class Meta:
