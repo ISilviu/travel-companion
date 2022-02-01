@@ -24,9 +24,3 @@ class ReadonlyInitiatedTripsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['initiated_trips']
-
-
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['url', 'name']
