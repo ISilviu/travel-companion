@@ -11,6 +11,9 @@ from ddf import G
 
 
 class CityApiTests(CommonOperationsMixin, APITestCase):
+    """
+    Tests for the /cities endpoint.
+    """
     test_model = City
     serializer_class = CitySerializer
     url_base = '/api/cities/'
