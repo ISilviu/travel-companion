@@ -16,6 +16,9 @@ class UserSerializer(serializers.ModelSerializer):
                   'groups', 'participating_trips', 'initiated_trips', 'is_superuser']
 
     def create(self, validated_data):
+        """
+        Explicitly call set_password to ensure the password is hashed.
+        """
         password = validated_data.pop('password')
         user = super().create(validated_data)
         user.set_password(password)
