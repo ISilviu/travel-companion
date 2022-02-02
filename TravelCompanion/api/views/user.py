@@ -7,6 +7,9 @@ from ..serializers.user import ReadonlyInitiatedTripsSerializer, UserSerializer
 from ..models.user import User
 
 class CreateOnlyPermission(permissions.IsAuthenticated):
+    """
+    Don't require authentication for user registering.
+    """
     def has_permission(self, request, view):
         return True if view.action == 'create' else super().has_permission(request, view)
 
