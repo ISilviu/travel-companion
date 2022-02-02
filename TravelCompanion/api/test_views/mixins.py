@@ -2,6 +2,13 @@ from ddf import G
 from django.db import models
 from rest_framework import serializers, status
 
+from ..models.user import User
+
+class UserAuthMixin:
+    def setUp(self):
+        user = User.objects.create_user('user', 'pass')
+        self.client.force_authenticate(user)
+
 class CommonOperationsMixin:
     """
     Mixin containing tests for operations that don't require custom fields or request bodies.
