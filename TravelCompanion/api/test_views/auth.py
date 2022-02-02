@@ -3,6 +3,9 @@ from rest_framework import status
 
 
 class SecuredRoutesApiTests(APITestCase):
+    """
+    Tests secured routes if authentication is done properly.
+    """
     def _retrieve_auth_token(self):
         user_data = {
             'username': 'user',

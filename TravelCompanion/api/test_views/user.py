@@ -21,6 +21,7 @@ class UserApiTests(UserAuthMixin, CommonOperationsMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_successful(self):
+        # POST requests should be allowed with no authenticated user
         self.client.logout()
         response = self.client.post(self.url_base, data={
                                     'username': 'isilviu', 'password': 'hello'}, format='json')
