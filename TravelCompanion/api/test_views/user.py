@@ -32,24 +32,11 @@ class UserApiTests(UserAuthMixin, CommonOperationsMixin, APITestCase):
         self.assertEqual(result.status_code, status.HTTP_200_OK)
         self.assertEqual(len(result.data), 1)
 
-    def _retrieve_auth_token(self):
+    def test_get_auth_token(self):
         user_data = {
             'username': 'isilviu',
             'password': 'hello'
         }
         self.client.post(self.url_base, data=user_data, format='json')
         response = self.client.post('/auth/', data=user_data, format='json')
-        return response.data['token']
-
-    def test_get_auth_token(self):
-        token = self._retrieve_auth_token()
-        self.assertTrue(len(token))
-
-# def test_access_secured_route(self):
-#         response = self.client.get('/api/trips/')
-#         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-#         token = self._retrieve_auth_token()
-#         response = self.client.get(
-#             '/api/trips/', format='json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(response.data['token']))
