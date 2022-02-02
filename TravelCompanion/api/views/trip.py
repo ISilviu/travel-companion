@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import permissions
 
 from ..models.trip import Trip
 from ..serializers.trip import ReadonlyTripSerializer, TripCitiesSerializer, TripSerializer
@@ -9,6 +10,8 @@ from ..serializers.trip import ReadonlyTripSerializer, TripCitiesSerializer, Tri
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.select_related(
         'initiator').prefetch_related('participants', 'cities')
+
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):
         is_read_action = self.action == 'list' or self.action == 'retrieve'

@@ -4,7 +4,7 @@ from django.utils import timezone
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from .mixins import CommonOperationsMixin
+from .mixins import CommonOperationsMixin, UserAuthMixin
 
 from ..models.trip import Trip, TripCity
 from ..models.user import User
@@ -14,7 +14,7 @@ from ..serializers.trip import ReadonlyTripSerializer
 from ddf import G
 
 
-class TripApiTests(CommonOperationsMixin, APITestCase):
+class TripApiTests(UserAuthMixin, CommonOperationsMixin, APITestCase):
     """
     Tests for the /trips endpoint.
     """
