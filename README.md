@@ -22,6 +22,9 @@ The application has 3 main REST endpoints:
     - POST -> adds a new user
     - `{id}/` -> PUT/PATCH/DELETE - mutates existing users, GET - retrieves user details
     - `{id}/trips/` -> GET - retrieves the trips of a user
+4. `/auth/`
+    - POST -> the request body should contain the username and the password of a registered user
+           -> returns the access token
 
 For request body examples, please check the viewset tests.
 
