@@ -2,7 +2,7 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from .mixins import CommonOperationsMixin
+from .mixins import CommonOperationsMixin, UserAuthMixin
 
 from ..models.city import City
 from ..serializers.city import CitySerializer
@@ -10,7 +10,7 @@ from ..serializers.city import CitySerializer
 from ddf import G
 
 
-class CityApiTests(CommonOperationsMixin, APITestCase):
+class CityApiTests(UserAuthMixin, CommonOperationsMixin, APITestCase):
     """
     Tests for the /cities endpoint.
     """
